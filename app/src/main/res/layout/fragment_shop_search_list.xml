@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    tools:context=".Shop.Shop_SearchListFragment">
+
+
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/bg_shop_search"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_show_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingStart="2dp"
+            android:textColor="@color/black"
+            android:textSize="10sp" />
+
+        <RelativeLayout
+            android:id="@+id/timeZoneLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0.2dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/spinner"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#666666" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/recycler_viewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/searchLayout">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/shopSearchRecylerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp" />
+        </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_loadMore"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/recycler_viewLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/bg_shop_filters"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_shop_loadmore"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+</RelativeLayout>
