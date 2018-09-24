@@ -1,39 +1,35 @@
 {
   "project_info": {
-    "project_number": "170168176816",
-    "firebase_url": "https://adforest-ab45e.firebaseio.com",
-    "project_id": "adforest-ab45e",
-    "storage_bucket": "adforest-ab45e.appspot.com"
+    "project_number": "639940038478",
+    "firebase_url": "https://shopping-c631c.firebaseio.com",
+    "project_id": "shopping-c631c",
+    "storage_bucket": "shopping-c631c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:170168176816:android:7c49d06b0b89bf03",
+        "mobilesdk_app_id": "1:639940038478:android:3ef527498cee153f",
         "android_client_info": {
-          "package_name": "com.scriptsbundle.adforest"
+          "package_name": "com.InternetSolutions.shopping"
         }
       },
       "oauth_client": [
         {
-          "client_id": "170168176816-qjb5dni8ro7uv1212idnd9sebe9u1csfb06u.apps.googleusercontent.com",
+          "client_id": "639940038478-i2gn17ct67lpds37agvth4o4gdvnrk6k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.scriptsbundle.adforest",
-            "certificate_hash": "feed22d8f88121212128d7863f4eab5df00f058b1138c7"
+            "package_name": "com.InternetSolutions.shopping",
+            "certificate_hash": "067f6005f5fc52e44a1a5914b76fc3f0df1b63e8"
           }
         },
         {
-          "client_id": "170168176816-96vo4j6q5s20vp7t21221atlvojna6rrqik5.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "170168176816-96vo4j6q5s20v1212p7t2atlvojna6rrqik5.apps.googleusercontent.com",
+          "client_id": "639940038478-b5ocgq4pqb5nf69f49tmqb5kf5a01gmc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_tT3afDTRExMQ12124TKL9qw8fgAZtxcUx_4"
+          "current_key": "AIzaSyDIpubR0VX5t_UvWpjpQKmYRoI9ZUYxb50"
         }
       ],
       "services": {
@@ -44,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "170168176816-96v2112o4j6q5s20vp7t2atlvojna6rrqik5.apps.googleusercontent.com",
+              "client_id": "639940038478-b5ocgq4pqb5nf69f49tmqb5kf5a01gmc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

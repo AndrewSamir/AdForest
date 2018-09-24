@@ -120,7 +120,7 @@
             android:layout_below="@+id/searchLayout"
             android:background="@color/cardview_shadow_end_color"
             android:padding="2dp"
-            tools:context="com.scriptsbundle.adforest.home.FragmentHome">
+            tools:context="com.InternetSolutions.shopping.home.FragmentHome">
 
 
             <LinearLayout
