@@ -20,6 +20,7 @@
             android:visibility="gone">
 
             <ImageView
+                android:src="@mipmap/ic_launcher"
                 android:id="@+id/backgroundImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -129,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="5dp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/featureAboveLayoyut"
@@ -145,6 +146,7 @@
                     android:paddingBottom="4dp"
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
+                    tools:text="textView6"
                     android:paddingTop="4dp"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
