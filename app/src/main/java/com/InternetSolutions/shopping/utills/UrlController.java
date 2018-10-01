@@ -22,8 +22,8 @@ public class UrlController {
             .build();
     private static String Purchase_code = "d5a11f1e-e777-446c-8436-ec2d7115c9e9";
     private static String Custom_Security = "4dcc7854-26c4-4e49-8034-c54fb1b3b2f211";
-    private static String IP_ADDRESS = "http://920009249.com/";
-    private static String Base_URL = IP_ADDRESS + "sjomaa/shopping";
+    private static String IP_ADDRESS = "http://920009249.com/sjomaa/shopping/";
+    private static String Base_URL = IP_ADDRESS + "wp-json/adforest/v1/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     private static Retrofit.Builder builder =

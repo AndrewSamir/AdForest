@@ -12,7 +12,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@color/background_color"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/padding_top">
 
