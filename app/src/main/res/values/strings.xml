@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">تسوق</string>
 
-    <string name="facebook_app_id">101325626605498523</string>
+    <string name="facebook_app_id">102711577333756</string>
     <string name="fb_login_protocol_scheme">fb101325626605498523</string>
 
     <string name="player_error">Error initializing YouTube player: %s</string>

@@ -44,6 +44,9 @@ import android.widget.Toast;
 import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
+import com.jaiselrahman.filepicker.activity.FilePickerActivity;
+import com.jaiselrahman.filepicker.config.Configurations;
+import com.jaiselrahman.filepicker.model.MediaFile;
 import com.squareup.picasso.Picasso;
 import com.xw.repo.BubbleSeekBar;
 
@@ -52,12 +55,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
+
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import com.InternetSolutions.shopping.Blog.BlogDetailFragment;
 import com.InternetSolutions.shopping.Blog.BlogFragment;
 import com.InternetSolutions.shopping.Notification.Config;
@@ -135,7 +141,21 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO change the comment
                 runtimePermissionHelper.requestLocationPermission(2);
+
+                //TODO remove below lines
+
+              /*  Intent intent = new Intent(HomeActivity.this, FilePickerActivity.class);
+                intent.putExtra(FilePickerActivity.CONFIGS, new Configurations.Builder()
+                        .setCheckPermission(true)
+                        .setShowImages(false)
+                        .enableImageCapture(false)
+                        .setShowFiles(true)
+                        .setMaxSelection(10)
+                        .setSkipZeroSizeFiles(true)
+                        .build());
+                startActivityForResult(intent, 20);*/
             }
         });
 
@@ -227,6 +247,19 @@ public class HomeActivity extends AppCompatActivity
         }
         startFragment(fragmentHome, "FragmentHome");
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+
+            case 20:
+                ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
+
+                break;
+        }
     }
 
     private void adforest_swipeRefresh() {
