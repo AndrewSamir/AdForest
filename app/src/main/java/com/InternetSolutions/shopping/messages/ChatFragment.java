@@ -2,12 +2,19 @@ package com.InternetSolutions.shopping.messages;
 
 
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -45,12 +52,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeoutException;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -702,6 +713,230 @@ public class ChatFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    public void adforest_sendAttachedMessage(String path)
+    {
+
+        msgListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        msgListView.setStackFromBottom(true);
+
+
+        if (SettingsMain.isConnectingToInternet(getActivity()))
+        {
+
+            SettingsMain.showDilog(getActivity());
+
+//                   Log.d("info sendMessage Object", "" + params.toString());
+
+            Uri uri = Uri.parse(path);
+
+            Call<ResponseBody> myCall = restService.attachFile(prepareFilePart("chatf", uri), UrlController.AddHeaders(getActivity()));
+            myCall.enqueue(new Callback<ResponseBody>()
+            {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> responseObj)
+                {
+                    try
+                    {
+                        if (responseObj.isSuccessful())
+                        {
+                            Log.d("info sendMessage Resp", "" + responseObj.toString());
+
+                            JSONObject response = new JSONObject(responseObj.body().string());
+                            if (response.getBoolean("success"))
+                            {
+                                Log.d("info sendMessage object", "" + response.getJSONObject("data"));
+
+                                adforest_intList(response.getJSONObject("data").getJSONArray("chat"));
+
+                                chatAdapter = new ChatAdapter(getActivity(), chatlist);
+                                msgListView.setAdapter(chatAdapter);
+
+                                msg_edittext.setText("");
+                            } else
+                            {
+                                Toast.makeText(getActivity(), response.get("message").toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        SettingsMain.hideDilog();
+                    } catch (JSONException e)
+                    {
+                        SettingsMain.hideDilog();
+                        e.printStackTrace();
+                    } catch (IOException e)
+                    {
+                        SettingsMain.hideDilog();
+                        e.printStackTrace();
+                    }
+                    SettingsMain.hideDilog();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t)
+                {
+                    if (t instanceof TimeoutException)
+                    {
+                        Toast.makeText(getActivity(), settingsMain.getAlertDialogMessage("internetMessage"), Toast.LENGTH_SHORT).show();
+                        SettingsMain.hideDilog();
+                    }
+                    if (t instanceof SocketTimeoutException || t instanceof NullPointerException)
+                    {
+
+                        Toast.makeText(getActivity(), settingsMain.getAlertDialogMessage("internetMessage"), Toast.LENGTH_SHORT).show();
+                        SettingsMain.hideDilog();
+                    }
+                    if (t instanceof NullPointerException || t instanceof UnknownError || t instanceof NumberFormatException)
+                    {
+                        Log.d("info sendMessage", "NullPointert Exception" + t.getLocalizedMessage());
+                        SettingsMain.hideDilog();
+                    } else
+                    {
+                        SettingsMain.hideDilog();
+                        Log.d("info sendMessage error", String.valueOf(t));
+                        Log.d("info sendMessage error", String.valueOf(t.getMessage() + t.getCause() + t.fillInStackTrace()));
+                    }
+                }
+            });
+        } else
+        {
+            SettingsMain.hideDilog();
+            Toast.makeText(getActivity(), "Internet error", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri)
+    {
+
+        File file = new File(getRealPathFromUri(fileUri));
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        // MultipartBody.Part is used to send also the actual file name
+        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
+    }
+
+    private String getRealPathFromUri(final Uri uri)
+    {
+        // DocumentProvider
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(getActivity(), uri))
+        {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri))
+            {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type))
+                {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri))
+            {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(getActivity(), contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri))
+            {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type))
+                {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type))
+                {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type))
+                {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(getActivity(), contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme()))
+        {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(getActivity(), uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme()))
+        {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    private String getDataColumn(Context context, Uri uri, String selection,
+                                 String[] selectionArgs)
+    {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try
+        {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst())
+            {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally
+        {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+
+    private boolean isExternalStorageDocument(Uri uri)
+    {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isDownloadsDocument(Uri uri)
+    {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isMediaDocument(Uri uri)
+    {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private boolean isGooglePhotosUri(Uri uri)
+    {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
     @Override
     public void onClick(View v)
     {
@@ -776,7 +1011,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 
             case 20:
                 ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
-
+                adforest_sendAttachedMessage(files.get(0).getPath());
                 break;
         }
     }

@@ -16,12 +16,14 @@ import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 
 /**
  * Created by apple on 12/18/17.
  */
 
-public interface RestService {
+public interface RestService
+{
 
     //region Settings, Login, Fogot and Register EndPoints
     //get application settings
@@ -539,6 +541,14 @@ public interface RestService {
     Call<ResponseBody> postGetRecievedOffersList(
             @Body JsonObject recievedList,
             @HeaderMap Map<String, String> headers
+    );
+
+
+    //attach file
+    @Multipart
+    @POST("/chatf/api")
+    Call<ResponseBody> attachFile(@Part MultipartBody.Part File,
+                                          @HeaderMap Map<String, String> headers
     );
 
 
