@@ -43,7 +43,8 @@ import com.InternetSolutions.shopping.utills.Network.RestService;
 import com.InternetSolutions.shopping.utills.SettingsMain;
 import com.InternetSolutions.shopping.utills.UrlController;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity
+{
 
     public static JSONObject jsonObjectAppRating, jsonObjectAppShare;
     public static boolean gmap_has_countries = false, app_show_languages = false;
@@ -56,7 +57,8 @@ public class SplashScreen extends AppCompatActivity {
     String gmap_lang;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         Configuration configuration = getResources().getConfiguration();
@@ -70,7 +72,8 @@ public class SplashScreen extends AppCompatActivity {
         activity = this;
         setting = new SettingsMain(this);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.getBoolean("firstTime", false)) {
+        if (!prefs.getBoolean("firstTime", false))
+        {
 
             setting.setUserLogin("0");
 
@@ -79,37 +82,46 @@ public class SplashScreen extends AppCompatActivity {
             editor.apply();
         }
 
-        if (getSupportActionBar() != null) {
+        if (getSupportActionBar() != null)
+        {
             getSupportActionBar().hide();
         }
 
 
-        try {
+        try
+        {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.scriptsbundle.adforest",
                     PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
+            for (Signature signature : info.signatures)
+            {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e)
+        {
 
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e)
+        {
             e.printStackTrace();
         }
 
-        if (SettingsMain.isConnectingToInternet(this)) {
+        if (SettingsMain.isConnectingToInternet(this))
+        {
             adforest_getSettings();
-        } else {
+        } else
+        {
             AlertDialog.Builder alert = new AlertDialog.Builder(SplashScreen.this);
             alert.setTitle(setting.getAlertDialogTitle("error"));
             alert.setCancelable(false);
             alert.setMessage(setting.getAlertDialogMessage("internetMessage"));
-            alert.setPositiveButton(setting.getAlertOkText(), new DialogInterface.OnClickListener() {
+            alert.setPositiveButton(setting.getAlertOkText(), new DialogInterface.OnClickListener()
+            {
                 @Override
                 public void onClick(DialogInterface dialog,
-                                    int which) {
+                                    int which)
+                {
                     dialog.dismiss();
                     SplashScreen.this.recreate();
                 }
@@ -120,22 +132,31 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
-    public void adforest_getSettings() {
+    public void adforest_getSettings()
+    {
         RestService restService =
                 UrlController.createService(RestService.class);
-        try {
+        try
+        {
 
             Call<ResponseBody> myCall = restService.getSettings(UrlController.AddHeaders(this));
-            myCall.enqueue(new Callback<ResponseBody>() {
+            Log.d("callUrl", myCall.request().url().toString());
+
+            myCall.enqueue(new Callback<ResponseBody>()
+            {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> responseObj) {
-                    try {
-                        if (responseObj.isSuccessful()) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> responseObj)
+                {
+                    try
+                    {
+                        if (responseObj.isSuccessful())
+                        {
                             Log.d("info settings Responce", "" + responseObj.toString());
 
                             JSONObject response = new JSONObject(responseObj.body().string());
                             Log.d("info settings object", "" + response.getJSONObject("data"));
-                            if (response.getBoolean("success")) {
+                            if (response.getBoolean("success"))
+                            {
                                 jsonObjectSetting = response.getJSONObject("data");
 
                                 setting.setMainColor(jsonObjectSetting.getString("main_color"));
@@ -196,12 +217,14 @@ public class SplashScreen extends AppCompatActivity {
                                 setting.setNotificationMessage("");
                                 setting.setNotificationTitle("");
 
-                                if (setting.getAppOpen()) {
+                                if (setting.getAppOpen())
+                                {
                                     setting.setNoLoginMessage(jsonObjectSetting.getString("notLogin_msg"));
                                 }
 
                                 setting.setFeaturedScrollEnable(jsonObjectSetting.getBoolean("featured_scroll_enabled"));
-                                if (setting.isFeaturedScrollEnable()) {
+                                if (setting.isFeaturedScrollEnable())
+                                {
                                     Log.d("info setting AutoScroll", jsonObjectSetting.getJSONObject("featured_scroll").toString());
                                     setting.setFeaturedScroolDuration(jsonObjectSetting.getJSONObject("featured_scroll").getInt("duration"));
                                     setting.setFeaturedScroolLoop(jsonObjectSetting.getJSONObject("featured_scroll").getInt("loop"));
@@ -211,12 +234,14 @@ public class SplashScreen extends AppCompatActivity {
                                 jsonObjectAppShare = jsonObjectSetting.getJSONObject("app_share");
 
                                 gmap_has_countries = jsonObjectSetting.getBoolean("gmap_has_countries");
-                                if (gmap_has_countries) {
+                                if (gmap_has_countries)
+                                {
                                     gmap_countries = jsonObjectSetting.getString("gmap_countries");
                                 }
                                 app_show_languages = jsonObjectSetting.getBoolean("app_show_languages");
 
-                                if (app_show_languages) {
+                                if (app_show_languages)
+                                {
                                     languagePopupTitle = jsonObjectSetting.getString("app_text_title");
                                     languagePopupClose = jsonObjectSetting.getString("app_text_close");
                                     app_languages = jsonObjectSetting.getJSONArray("app_languages");
@@ -251,29 +276,37 @@ public class SplashScreen extends AppCompatActivity {
 
 
                                 final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
+                                handler.postDelayed(new Runnable()
+                                {
                                     @Override
-                                    public void run() {
+                                    public void run()
+                                    {
                                         //Do something after 100ms
 
-                                        if (setting.getUserLogin().equals("0")) {
+                                        if (setting.getUserLogin().equals("0"))
+                                        {
                                             SplashScreen.this.finish();
-                                            if (setting.isLanguageChanged()) {
+                                            if (setting.isLanguageChanged())
+                                            {
                                                 if (isRTL)
                                                     updateViews(gmap_lang);
-                                                else {
+                                                else
+                                                {
                                                     updateViews("en");
                                                 }
                                             }
                                             Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                                             startActivity(intent);
                                             overridePendingTransition(R.anim.right_enter, R.anim.left_out);
-                                        } else {
+                                        } else
+                                        {
                                             SplashScreen.this.finish();
-                                            if (setting.isLanguageChanged()) {
+                                            if (setting.isLanguageChanged())
+                                            {
                                                 if (isRTL)
                                                     updateViews(gmap_lang);
-                                                else {
+                                                else
+                                                {
                                                     updateViews("en");
                                                 }
                                             }
@@ -284,44 +317,54 @@ public class SplashScreen extends AppCompatActivity {
                                             overridePendingTransition(R.anim.right_enter, R.anim.left_out);
                                         }
 
-                                        if (app_show_languages && !setting.isLanguageChanged()) {
-                                            if (setting.getLanguageRtl()) {
+                                        if (app_show_languages && !setting.isLanguageChanged())
+                                        {
+                                            if (setting.getLanguageRtl())
+                                            {
                                                 updateViews("ur");
-                                            } else {
+                                            } else
+                                            {
                                                 updateViews("en");
                                             }
                                         }
                                     }
                                 }, 2000);
-                            } else {
+                            } else
+                            {
                                 Toast.makeText(activity, response.get("message").toString(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
-                    } catch (JSONException e) {
+                    } catch (JSONException e)
+                    {
                         e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t)
+                {
                     Log.d("info settings error", String.valueOf(t));
                     Log.d("info settings error", String.valueOf(t.getMessage() + t.getCause() + t.fillInStackTrace()));
                 }
             });
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(Context base)
+    {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
-    private void updateViews(String languageCode) {
+    private void updateViews(String languageCode)
+    {
         LocaleHelper.setLocale(this, languageCode);
     }
 }

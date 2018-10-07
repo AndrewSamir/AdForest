@@ -73,21 +73,23 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
+
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@id/temp"
         android:layout_below="@id/cardView"
         android:background="@drawable/background"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tv_typing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="7dp"
             android:textColor="@color/black"
-            android:visibility="gone"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
@@ -109,9 +111,9 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/form"
+        android:background="@color/white_greyish"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:background="@color/white_greyish">
+        android:focusableInTouchMode="true">
 
         <requestFocus />
     </View>
@@ -126,6 +128,12 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/img_attach_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_attach_file" />
+
         <EditText
             android:id="@+id/messageEditText"
             android:layout_width="0dp"
@@ -133,7 +141,6 @@
             android:layout_weight="0.72"
             android:background="@android:color/transparent"
             android:drawablePadding="10dp"
-            android:drawableStart="@drawable/ic_mail_outline"
             android:hint=""
             android:maxHeight="80dp"
             android:padding="10dp" />

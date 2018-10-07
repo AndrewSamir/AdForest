@@ -44,9 +44,6 @@ import android.widget.Toast;
 import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
-import com.jaiselrahman.filepicker.activity.FilePickerActivity;
-import com.jaiselrahman.filepicker.config.Configurations;
-import com.jaiselrahman.filepicker.model.MediaFile;
 import com.squareup.picasso.Picasso;
 import com.xw.repo.BubbleSeekBar;
 
@@ -146,16 +143,7 @@ public class HomeActivity extends AppCompatActivity
 
                 //TODO remove below lines
 
-              /*  Intent intent = new Intent(HomeActivity.this, FilePickerActivity.class);
-                intent.putExtra(FilePickerActivity.CONFIGS, new Configurations.Builder()
-                        .setCheckPermission(true)
-                        .setShowImages(false)
-                        .enableImageCapture(false)
-                        .setShowFiles(true)
-                        .setMaxSelection(10)
-                        .setSkipZeroSizeFiles(true)
-                        .build());
-                startActivityForResult(intent, 20);*/
+
             }
         });
 
@@ -249,18 +237,7 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-
-            case 20:
-                ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
-
-                break;
-        }
-    }
 
     private void adforest_swipeRefresh() {
         String fragment = null;
