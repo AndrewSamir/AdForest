@@ -759,7 +759,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
                         }
                         SettingsMain.hideDilog();
                     } catch (JSONException e)
-                    {
+                    { 
                         SettingsMain.hideDilog();
                         e.printStackTrace();
                     } catch (IOException e)
