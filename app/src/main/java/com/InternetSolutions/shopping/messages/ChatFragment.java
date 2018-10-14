@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,6 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.InternetSolutions.shopping.home.HomeActivity;
+import com.InternetSolutions.shopping.signinorup.MainActivity;
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -57,6 +63,8 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import okhttp3.MediaType;
@@ -97,7 +105,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
     String typingRecieverId;
     String typingText;
     TextView tv_chatTtile, tv_online;
-
+    DialogProperties properties;
     public ChatFragment()
     {
         // Required empty public constructor
@@ -211,6 +219,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
                 }
             }
         };
+        properties = new DialogProperties();
         adforest_getChat();
 //        adforest_typingIndicatoor();
 //        adforest_checkLogin();
@@ -713,7 +722,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public void adforest_sendAttachedMessage(String path)
+    public void adforest_sendAttachedMessage(Uri path)
     {
 
         msgListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -727,9 +736,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 
 //                   Log.d("info sendMessage Object", "" + params.toString());
 
-            Uri uri = Uri.parse(path);
+//            Uri uri = Uri.parse(path);
 
-            Call<ResponseBody> myCall = restService.attachFile(prepareFilePart("chatf", uri), UrlController.AddHeaders(getActivity()));
+            Map<String,String> map=new HashMap<>();
+            map.put("Purchase-Code","d5a11f1e-e777-446c-8436-ec2d7115c9e9");
+            map.put("custom-Security","4dcc7854-26c4-4e49-8034-c54fb1b3b2f211");
+            Call<ResponseBody> myCall = restService.attachFile(prepareFilePart("chatf", path), map);
             myCall.enqueue(new Callback<ResponseBody>()
             {
                 @Override
@@ -805,11 +817,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 
     }
 
-
-    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri)
-    {
-
-        File file = new File(getRealPathFromUri(fileUri));
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+        File file = new File(fileUri.getPath());
+        Log.e("filename", file.getName());
         // create RequestBody instance from file
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         // MultipartBody.Part is used to send also the actual file name
@@ -948,7 +959,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.img_attach_message:
-                attachFile();
+                testAttachFile();
+//                attachFile();
                 break;
         }
     }
@@ -993,8 +1005,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener
         intent.putExtra(com.jaiselrahman.filepicker.activity.FilePickerActivity.CONFIGS, new Configurations.Builder()
                 .setCheckPermission(true)
                 .setShowImages(true)
-                .enableImageCapture(true)
-                .setShowFiles(true)
+                .enableImageCapture(false)
+                .setShowVideos(false)
+                .setShowFiles(false)
                 .setMaxSelection(1)
                 .setSkipZeroSizeFiles(true)
                 .build());
@@ -1011,8 +1024,31 @@ public class ChatFragment extends Fragment implements View.OnClickListener
 
             case 20:
                 ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
-                adforest_sendAttachedMessage(files.get(0).getPath());
+//                adforest_sendAttachedMessage(files.get(0).getPath());
                 break;
         }
+    }
+
+    private void testAttachFile(){
+
+
+        properties.selection_mode = DialogConfigs.SINGLE_MODE;
+        properties.selection_type = DialogConfigs.FILE_SELECT;
+        properties.root = new File(DialogConfigs.DEFAULT_DIR);
+        properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+        properties.offset = new File(DialogConfigs.DEFAULT_DIR);
+        properties.extensions = null;
+
+        FilePickerDialog dialog = new FilePickerDialog(getActivity(),properties);
+        dialog.setTitle("Select a File");
+
+        dialog.setDialogSelectionListener(new DialogSelectionListener() {
+            @Override
+            public void onSelectedFilePaths(String[] files) {
+                adforest_sendAttachedMessage(Uri.parse(files[0]));
+            }
+        });
+
+        dialog.show();
     }
 }

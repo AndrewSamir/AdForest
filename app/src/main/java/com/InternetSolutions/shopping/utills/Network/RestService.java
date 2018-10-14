@@ -546,10 +546,9 @@ public interface RestService
 
     //attach file
     @Multipart
-    @POST("/chatf/api")
+    @POST("/sjomaa/shopping/wp-json/adforest/v1/kallam")
     Call<ResponseBody> attachFile(@Part MultipartBody.Part File,
-                                          @HeaderMap Map<String, String> headers
-    );
+                                  @HeaderMap Map<String, String> headers);
 
 
     //endregion
